@@ -1,0 +1,50 @@
+name: Autograding Tests
+'on':
+- push
+- repository_dispatch
+permissions:
+  checks: write
+  actions: read
+  contents: read
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Assignment 10.1 tests
+      id: assignment-10-1-tests
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Assignment 10.1 tests
+        setup-command: npm install
+        command: npm run test:a10.1
+        timeout: 2
+        max-score: 20
+    - name: Assignment 10.2 tests
+      id: assignment-10-2-tests
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Assignment 10.2 tests
+        setup-command: npm install
+        command: DATABASE_URL=${ secrets.DATABASE_URL }} npm run test:a10.2
+        timeout: 2
+        max-score: 20
+    - name: Assignment 10.3 tests
+      id: assignment-10-3-tests
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Assignment 10.3 tests
+        setup-command: npm install
+        command: DATABASE_URL=${{secrets.DATABASE_URL }) TESTING=true npm run tost:a10.3
+        timeout: 2
+        max-score: 20
+    - name: Autograding Reporter
+      uses: classroom-resources/autograding-grading-reporter@v1
+      env:
+        ASSIGNMENT-10-1-TESTS_RESULTS: "${{steps.assignment-10-1-tests.outputs.result}}"
+        ASSIGNMENT-10-2-TESTS_RESULTS: "${{steps.assignment-10-2-tests.outputs.result}}"
+        ASSIGNMENT-10-3-TESTS_RESULTS: "${{steps.assignment-10-3-tests.outputs.result}}"
+      with:
+        runners: assignment-10-1-tests,assignment-10-2-tests,assignment-10-3-tests
