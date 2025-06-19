@@ -28,7 +28,7 @@ jobs:
       with:
         test-name: Assignment 10.2 tests
         setup-command: npm install
-        command: DATABASE_URL=${ secrets.DATABASE_URL }} npm run test:a10.2
+        command: DATABASE_URL=${{ secrets.DATABASE_URL }} npm run test:a10.2
         timeout: 2
         max-score: 20
     - name: Assignment 10.3 tests
@@ -37,7 +37,7 @@ jobs:
       with:
         test-name: Assignment 10.3 tests
         setup-command: npm install
-        command: DATABASE_URL=${{secrets.DATABASE_URL }) TESTING=true npm run tost:a10.3
+        command: DATABASE_URL=${{secrets.DATABASE_URL }} TESTING=true npm run test:a10.3
         timeout: 2
         max-score: 20
     - name: Autograding Reporter
