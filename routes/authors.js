@@ -4,19 +4,84 @@ const router = express.Router();
 // access to authors array
 const { authors } = require('../data/data');
 
-/**
- * TODO: Use router to define all CRUD operations: 1- get all, 2- get by id, 3- post a new author, 4- update an author, and 5- delete an author.
- *       Make sure to follow best practices as much as you can: use try-catch, use status codes efficiently, 
- *       and use console.log or console.error to print errors.
- *       Make sure to cover the cases of getting, deleting and updating an item that doesn't exist in the array, which should return: not found code (404)
- * 
- *       Follow the same rules of status codes and logic described in books routes. 
- *          
- *       Notice that post request now is a little simpler here. There is no checking of validity of "author_id" value here.
- */
+// GET /all authors
+router.get('/', (req, res) => {
+  try {
+    res.status(200).json(authors);
+  } catch (error) {
+    console.error(error);
+    res.sendStatus(500);
+  }
+});
 
+// GET /authors/:id
+router.get('/:id', (req, res) => {
+  try {
+    const id = parseInt(req.params.id);
+    const author = authors.find(a => a.id === id);
+    if (!author) return res.status(404).send('Author not found');
+    res.status(200).json(author);
+  } catch (error) {
+    console.error(error);
+    res.sendStatus(500);
+  }
+});
 
+// POST /authors 
+router.post('/', (req, res) => {
+  try {
+     const { name, books: bookTitles = [] } = req.body; 
 
+    if (!name || !bookTitles) return res.status(400).send('Missing name or books');
+
+    const newId = authors.length > 0 ? Math.max(...authors.map(a => a.id)) + 1 : 1;
+    const newAuthor = {
+      id: newId,
+      name,
+      books: bookTitles,
+    };
+
+    authors.push(newAuthor);
+    res.status(201).json(newAuthor);
+  } catch (error) {
+    console.error(error);
+    res.sendStatus(500);
+  }
+});
+
+// PUT /authors/:id
+router.put('/:id', (req, res) => {
+  try {
+    const id = parseInt(req.params.id);
+    const { name, books: bookTitles } = req.body;
+
+    const author = authors.find(a => a.id === id);
+    if (!author) return res.status(404).send('Author not found');
+
+    if (name) author.name = name;
+    if (bookTitles) author.books = bookTitles;
+
+    res.status(200).json(author);
+  } catch (error) {
+    console.error(error);
+    res.sendStatus(500);
+  }
+});
+
+// DELETE /authors/:id
+router.delete('/:id', (req, res) => {
+  try {
+    const id = parseInt(req.params.id);
+    const index = authors.findIndex(a => a.id === id);
+    if (index === -1) return res.status(404).send('Author not found');
+
+    authors.splice(index, 1);
+    res.sendStatus(204);
+  } catch (error) {
+    console.error(error);
+    res.sendStatus(500);
+  }
+});
 
 
 

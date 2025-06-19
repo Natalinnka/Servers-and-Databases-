@@ -2,48 +2,33 @@ const express = require('express');
 const app = express();
 const port = 3000;
 const cors = require('cors');
+
+const morgan = require('morgan');
+const { endPointNotFound } = require('./utils/middlewares');
+
 // add necessary imports below: Morgan and endPointNotFound
 
 // Enable CORS for all routes and methods
 app.use(cors());
 // Middleware to parse JSON bodies
 app.use(express.json());
-/**
- * TODO: apply Morgan middleware (dev): https://expressjs.com/en/resources/middleware/morgan.html
- */
 
-/* TODO: End */
-
+app.use(morgan('dev'));
 
 const index = require('./routes/index');
-/**
- * TODO: include books and authors route
- */
-
-/* TODO: End */
+const booksRouter = require('./routes/books');
+const authorsRouter = require('./routes/authors');
 
 app.use('/', index)
-/**
- * TODO: use books and authors route
- */
+app.use('/books', booksRouter);
+app.use('/authors', authorsRouter);
 
-/* TODO: End */
-
-
-/**
- * TODO: apply unknown endpoints (endPointNotFound) middleware
- */
-
-/* TODO: End */
+app.use(endPointNotFound);
 
 
-// Exporting  the app for testing puporses
 module.exports = app;
 
 async function init() { // async for future additions below
-
-
-
   if (require.main === module) {
     app.listen(port, () => {
       console.log(`🚀 Server is running at http://localhost:${port}`);
@@ -52,5 +37,3 @@ async function init() { // async for future additions below
 }
 
 init();
-
-

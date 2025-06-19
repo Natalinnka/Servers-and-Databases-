@@ -1,6 +1,6 @@
 const endPointNotFound = (req, res) => {
-  // TO DO: return 404 and not found message 
-
+  // return 404 and not found message 
+  res.status(404).send({ error: 'Unknown endpoint' });
 };
 
 module.exports = {
