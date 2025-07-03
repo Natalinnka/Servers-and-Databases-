@@ -1,12 +1,11 @@
 const express = require('express');
 const router = express.Router();
+const Author = require('../models/Author');
 
-// access to authors array
-const { authors } = require('../data/data');
-
-// GET /all authors
-router.get('/', (req, res) => {
+// GET all authors
+router.get('/', async (req, res) => {
   try {
+    const authors = await Author.findAll();
     res.status(200).json(authors);
   } catch (error) {
     console.error(error);
@@ -14,11 +13,10 @@ router.get('/', (req, res) => {
   }
 });
 
-// GET /authors/:id
-router.get('/:id', (req, res) => {
+// GET author by ID
+router.get('/:id', async (req, res) => {
   try {
-    const id = parseInt(req.params.id);
-    const author = authors.find(a => a.id === id);
+    const author = await Author.findByPk(req.params.id);
     if (!author) return res.status(404).send('Author not found');
     res.status(200).json(author);
   } catch (error) {
@@ -27,21 +25,13 @@ router.get('/:id', (req, res) => {
   }
 });
 
-// POST /authors 
-router.post('/', (req, res) => {
+// POST create author
+router.post('/', async (req, res) => {
   try {
-     const { name, books: bookTitles = [] } = req.body; 
+    const { name } = req.body;
+    if (!name) return res.status(400).send('Missing name');
 
-    if (!name || !bookTitles) return res.status(400).send('Missing name or books');
-
-    const newId = authors.length > 0 ? Math.max(...authors.map(a => a.id)) + 1 : 1;
-    const newAuthor = {
-      id: newId,
-      name,
-      books: bookTitles,
-    };
-
-    authors.push(newAuthor);
+    const newAuthor = await Author.create({ name });
     res.status(201).json(newAuthor);
   } catch (error) {
     console.error(error);
@@ -49,18 +39,17 @@ router.post('/', (req, res) => {
   }
 });
 
-// PUT /authors/:id
-router.put('/:id', (req, res) => {
+// PUT update author
+router.put('/:id', async (req, res) => {
   try {
-    const id = parseInt(req.params.id);
-    const { name, books: bookTitles } = req.body;
+    const { name } = req.body;
+    const author = await Author.findByPk(req.params.id);
 
-    const author = authors.find(a => a.id === id);
     if (!author) return res.status(404).send('Author not found');
 
     if (name) author.name = name;
-    if (bookTitles) author.books = bookTitles;
 
+    await author.save();
     res.status(200).json(author);
   } catch (error) {
     console.error(error);
@@ -68,14 +57,13 @@ router.put('/:id', (req, res) => {
   }
 });
 
-// DELETE /authors/:id
-router.delete('/:id', (req, res) => {
+// DELETE author
+router.delete('/:id', async (req, res) => {
   try {
-    const id = parseInt(req.params.id);
-    const index = authors.findIndex(a => a.id === id);
-    if (index === -1) return res.status(404).send('Author not found');
+    const author = await Author.findByPk(req.params.id);
+    if (!author) return res.status(404).send('Author not found');
 
-    authors.splice(index, 1);
+    await author.destroy();
     res.sendStatus(204);
   } catch (error) {
     console.error(error);
@@ -83,8 +71,4 @@ router.delete('/:id', (req, res) => {
   }
 });
 
-
-
-
-/* TODO: End */
 module.exports = router;

@@ -1,6 +1,6 @@
 const request = require('supertest');
 const app = require('../../server');
-const { sequelize } = require('../../config/db');
+const sequelize  = require('../../config/db');
 
 const Author = require('../../models/Author');
 const Book = require('../../models/Book');

@@ -1,85 +1,88 @@
 const express = require('express');
 const router = express.Router();
-const { books, authors } = require('../data/data');
+const Book = require('../models/Book');
+const Author = require('../models/Author');
 
- 
-router.get('/', (req, res) => { // Get all books
+// GET all books
+router.get('/', async (req, res) => {
   try {
+    const books = await Book.findAll({ include: Author });
     res.status(200).json(books);
   } catch (error) {
+    console.error(error);
     res.sendStatus(500);
   }
 });
 
-router.get('/:id', (req, res) => { // Get one book by ID
+// GET book by ID
+router.get('/:id', async (req, res) => {
   try {
-    const id = parseInt(req.params.id);
-    const book = books.find(b => b.id === id);
+    const book = await Book.findByPk(req.params.id, { include: Author });
     if (!book) return res.status(404).send('Book not found');
     res.status(200).json(book);
-    
   } catch (error) {
     console.error(error);
     res.sendStatus(500);
   }
 });
 
-
-router.post('/', (req, res) => {   //  Add a new book
-  try { 
-    const { name, price, author_id } = req.body;
-
-    if (!name || !price) return res.status(400).send('Missing name or price');
-
-    const validAuthor = authors.find(a => a.id === author_id);
-    const assignedAuthorId = validAuthor ? author_id : 99;
-
-    const newId = books.length > 0 ? Math.max(...books.map(b => b.id)) + 1 : 1;
-    const newBook = { id: newId, name, price, author_id: assignedAuthorId };
-
-    books.push(newBook);
-    res.status(201).json(newBook);
-
-  } catch (error) {
-    console.error(error);
-    res.sendStatus(500);
-  }
-});
-
-router.put('/:id', (req, res) => { // Update a book by ID
+// POST create new book
+router.post('/', async (req, res) => {
   try {
-    const id = parseInt(req.params.id);
     const { name, price, author_id } = req.body;
+    if (!name || !price)
+      return res.status(400).send('Missing name or price');
+    const usedAuthorId = author_id || 999; // 👈 if not sended, it will be 999
+    const author = await Author.findByPk(usedAuthorId);
+    if (!author) return res.status(404).send('Author not found');
 
-    const book = books.find(b => b.id === id);
+    const newBook = await Book.create({ name, price, author_id: usedAuthorId});
+
+    res.status(201).json(newBook);
+  } catch (error) {
+    console.error(error);
+    res.sendStatus(500);
+  }
+});
+
+
+// PUT update book
+router.put('/:id', async (req, res) => {
+  try {
+    const book = await Book.findByPk(req.params.id);
     if (!book) return res.status(404).send('Book not found');
+
+    const { name, price, author_id } = req.body;
 
     if (name) book.name = name;
     if (price) book.price = price;
+
     if (author_id) {
-      const validAuthor = authors.find(a => a.id === author_id);
-      book.author_id = validAuthor ? author_id : 99;
-}
+      const author = await Author.findByPk(author_id);
+      if (!author) return res.status(404).send('Author not found');
+      book.author_id = author_id;
+    }
 
-
-    res.status(200).json(book);
-
+    await book.save();
+    res.status(200).json({
+      ...book.toJSON(),
+      price: parseFloat(book.price)
+    });
   } catch (error) {
     console.error(error);
     res.sendStatus(500);
   }
 });
 
-router.delete('/:id', (req, res) => { // Delete a book by ID
-  try { 
-    const id = parseInt(req.params.id);
-    const index = books.findIndex(b => b.id === id);
-    if (index === -1) return res.status(404).send('Book not found');
+// DELETE book
+router.delete('/:id', async (req, res) => {
+  try {
+    const book = await Book.findByPk(req.params.id);
+    if (!book) return res.status(404).send('Book not found');
 
-    books.splice(index, 1);
+    await book.destroy();
     res.sendStatus(204);
-
-  } catch (error) { 
+  } catch (error) {
     console.error(error);
     res.sendStatus(500);
   }
