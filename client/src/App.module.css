@@ -1,0 +1,47 @@
+/* App.module.css */
+/* Page layout and high-level styling */
+
+.app {
+    font-family: 'Segoe UI', sans-serif;
+    padding: 2rem;
+    background-color: #f7f9fb;
+    color: #111827;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+header {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #1f2937;
+    border-bottom: 2px solid #e5e7eb;
+    padding-bottom: 0.5rem;
+}
+
+.mainLayout {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: space-between;
+}
+
+/* Two columns: Left = forms, Right = lists */
+.leftColumn {
+    flex: 1;
+    min-width: 320px;
+    max-width: 450px;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.rightColumn {
+    flex: 2;
+    min-width: 340px;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
