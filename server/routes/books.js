@@ -6,11 +6,15 @@ const Author = require('../models/Author');
 // GET all books
 router.get('/', async (req, res) => {
   try {
+    console.log('📥 GET /books запит отримано');
+
     const books = await Book.findAll({ include: Author });
+
+    console.log('✅ Книги отримано:', books);
     res.status(200).json(books);
   } catch (error) {
-    console.error(error);
-    res.sendStatus(500);
+    console.error('❌ Помилка при завантаженні книг:', error);
+    res.status(500).send('Database connection failed');
   }
 });
 
@@ -31,12 +35,13 @@ router.post('/', async (req, res) => {
   try {
     const { name, price, author_id } = req.body;
     if (!name || !price)
-      return res.status(400).send('Missing name or price');
-    const usedAuthorId = author_id || 999; // 👈 if not sended, it will be 999
+      return res.status(400).json({ error: 'Missing name or price' });
+    const usedAuthorId = author_id || 999;
     const author = await Author.findByPk(usedAuthorId);
-    if (!author) return res.status(404).send('Author not found');
+    if (!author) return res.status(404).json({ error: 'Author not found' });
 
-    const newBook = await Book.create({ name, price, author_id: usedAuthorId});
+
+    const newBook = await Book.create({ name, price, author_id: usedAuthorId });
 
     res.status(201).json(newBook);
   } catch (error) {
@@ -44,7 +49,6 @@ router.post('/', async (req, res) => {
     res.sendStatus(500);
   }
 });
-
 
 // PUT update book
 router.put('/:id', async (req, res) => {

@@ -6,12 +6,13 @@ export default function BookList({ onSelect }) {
     const [books, setBooks] = useState([]);
 
     useEffect(() => {
-        // TODO: Load books from the server
-        // getBooks().then(setBooks);
+        getBooks().then(setBooks);
     }, []);
 
     const handleDelete = async (id) => {
-        // TODO: Call deleteBook and update state
+        await deleteBook(id);
+        const updated = books.filter(book => book.id !== id);
+        setBooks(updated);
     };
 
     return (
