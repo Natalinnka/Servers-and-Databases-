@@ -1,55 +1,147 @@
 /* App.module.css */
 /* Page layout and high-level styling */
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
 
 .app {
     font-family: 'Segoe UI', sans-serif;
-    padding: 2rem;
-    background-color: #f7f9fb;
-    color: #111827;
-    min-height: 100vh;
+    padding: 1rem;
+    background: url('/bg1.jpg') no-repeat center center fixed;
+    background-size: cover;
+    color: #142343;
+    min-height: 100vh; 
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 0.75rem;
+    box-sizing: border-box;
+    overflow-x: hidden; 
 }
 
 header {
     text-align: center;
     font-size: 2rem;
     font-weight: bold;
-    color: #1f2937;
-    border-bottom: 2px solid #e5e7eb;
-    padding-bottom: 0.5rem;
+    color: #d8c58e;
+    border-bottom: 2px solid #cea71d;
+    padding-bottom: 0.1rem;
 }
 
 .mainLayout {
     display: flex;
     flex-wrap: wrap;
-    gap: 2rem;
-    justify-content: space-between;
-}
-
-/* Two columns: Left = forms, Right = lists */
-.leftColumn {
-    flex: 1;
-    min-width: 320px;
-    max-width: 450px;
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-}
-
-.rightColumn {
-    flex: 2;
-    min-width: 340px;
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
+    gap: 1rem;
+    justify-content: center;
+    width: 100%;
+    overflow: hidden; 
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 .searchSection {
   padding: 1rem;
-  margin-bottom: 2rem;
-  background-color: #f9f9f9;
-  border: 1px solid #ccc;
+  margin-bottom: 0.5rem;
+  background-color: rgba(255, 255, 255, 0.371);
+  border: 1px solid #dddddd77;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+
+.searchSection h2 {
+  margin-top: 0.01rem;
+  margin-bottom: 0.2rem;
+  font-size: 1.3rem;
+}
+
+.searchSection input {
+  margin-bottom: 0.2rem;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.9rem;
+}
+
+.searchSection button {
+  padding: 0.25rem 0.75rem;
+  font-size: 0.9rem;
+}
+
+/* Two columns: Left = forms, Right = lists */
+.leftColumn,
+.rightColumn {
+  background: rgba(255, 255, 255, 0.4);
+  padding: 0.8rem;
+  gap: 1rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  margin-bottom: 0.1rem;
   border-radius: 8px;
 }
+
+.leftColumn h2,
+.rightColumn h2,
+.leftColumn h3,
+.rightColumn h3 {
+  margin-top: 0.2rem;
+  margin-bottom: 0.4rem;
+  font-size: 1.3rem;
+}
+
+.leftColumn {
+  flex: 1;
+  min-width: 320px;
+  display: flex;
+  flex-direction: column;
+}
+
+.rightColumn {
+  flex: 2;
+  min-width: 320px;
+  display: flex;
+  flex-direction: column;
+}
+
+
+@media (max-width: 400px) {
+  .app {
+    padding: 0.5rem;
+    gap: 0.5rem;
+  }
+
+  header {
+    font-size: 1.2rem;
+  }
+
+  .searchSection h2,
+  .leftColumn h2,
+  .rightColumn h2,
+  .leftColumn h3,
+  .rightColumn h3 {
+    font-size: 1rem;
+    margin-bottom: 0.2rem;
+  }
+
+  .searchSection input,
+  .searchSection button,
+  input,
+  select,
+  button {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.4rem;
+  }
+
+  .searchSection {
+    padding: 0.5rem;
+  }
+
+  .leftColumn,
+  .rightColumn {
+    padding: 0.5rem;
+    gap: 0.5rem;
+  }
+}
+
+

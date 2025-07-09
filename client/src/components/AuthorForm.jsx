@@ -17,12 +17,15 @@ export default function AuthorForm({ onSuccess }) {
     return (
         <form className={styles.form} onSubmit={handleSubmit}>
             <h2>Add Author</h2>
-            <input
-                placeholder="Author Name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-            />
-            <button type="submit">＋ Add</button>        </form>
+            <div className={styles.formRow}>
+                <input
+                    placeholder="Author Name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    required
+                />
+                <button type="submit">＋ Add</button>
+            </div>
+        </form>
     );
 }

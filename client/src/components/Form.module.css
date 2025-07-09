@@ -3,3 +3,48 @@
   padding: 1rem;
 }
 
+.formRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.5rem;
+}
+
+
+.formRow input {
+  flex: 1;
+  min-width: 0;
+}
+
+input, select {
+  padding: 0.3rem 0.5rem;
+  font-size: 0.9rem;
+}
+
+button {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+@media (max-width: 400px) {
+  
+  input, select {
+    font-size: 0.75rem;
+  }
+  
+  button {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.5rem;
+    cursor: pointer;
+  }
+}
+
+
+
+
+
+
+
+

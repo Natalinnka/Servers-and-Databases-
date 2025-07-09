@@ -1,5 +1,64 @@
 /* List.module.css */
-.listContainer {
-  margin: 1rem 0;
+
+.listItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  flex-wrap: wrap;
 }
+
+.buttonGroup {
+  display: flex;
+  gap: 0.3rem;
+}
+
+.inlineButtons {
+  display: flex;
+  gap: 0.3rem;
+  margin-left: 0.5rem;
+}
+
+.bookItem, .authorItem {
+  background-color: rgba(255, 255, 255, 0.5);
+  padding: 0.5rem 0.7rem;
+  border-radius: 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.bookItem .bookInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.bookActions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.editButton,
+.deleteButton {
+  border: none;
+  background: transparent;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.editButton:hover,
+.deleteButton:hover {
+  transform: scale(1.2);
+}
+
+@media (max-width: 400px) {
+  .bookItem, .authorItem {
+    font-size: 0.75rem;
+    padding: 0.4rem 0.6rem;
+  }
+}
+
+
+
 
